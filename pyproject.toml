@@ -1,0 +1,192 @@
+[dependency-groups]
+dev = [
+  "ruff>=0.14.2",
+  "pytest>=8.4.1",
+  "pytest-asyncio>=1.2.0",
+  "pytest-cov>=7.0.0",
+  "pre-commit>=4.3.0",
+  "pyright[nodejs]>=1.1.406",
+  "toml-sort>=0.24.3"
+]
+
+[project]
+name = "ai_finance"
+version = "0.0.1"
+description = "AI Finance Assistant"
+authors = [
+  {name = "Tam Nguyen", email = "npt.dc@outlook.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+  "pydantic-settings>=2.11.0",
+  "langchain>=1.0.2",
+  "langgraph>=1.0.1",
+  "langchainhub>=0.1.21",
+  "langgraph-cli[inmem]>=0.4.4",
+  "langchain-aws>=1.0.0",
+  "langchain-openai>=1.0.1",
+  "langchain-google-genai>=3.0.0",
+  "langchain-google-vertexai>=3.0.1",
+  "langchain-postgres>=0.0.16",
+  "langgraph-checkpoint-postgres>=3.0.0",
+  "langchain-mcp-adapters>=0.1.11",
+  "mcp[cli]>=1.19.0",
+  "tavily-python>=0.7.12",
+  "tiktoken>=0.11.0",
+  "psycopg[binary,pool]>=3.2.9",
+  "pgvector>=0.3.6",
+  "lxml>=5.3.0",
+  "retry>=0.9.2",
+  "python-dotenv>=1.1.0",
+  "types-PyYAML>=6.0.12.20250915",
+  "types-requests>=2.32.4.20250913",
+  "types-python-dateutil>=2.9.0.20251008",
+]
+
+[tool.black]
+line-length = 88
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+line_length = 88
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.pydocstyle]
+ignore = ["D104", "D107", "D212", "D203"]
+
+[tool.pyright]
+exclude = [".venv"]
+venvPath = "."
+venv = ".venv"
+reportMissingImports = false
+reportMissingModuleSource = false
+reportGeneralTypeIssues = false
+reportCallIssue = false
+reportFunctionMemberAccess = false
+reportAttributeAccessIssue = false
+reportOptionalMemberAccess = false
+reportArgumentType = false
+
+[tool.ruff]
+target-version = "py313"
+# Same as Black.
+line-length = 88
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint]
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+# Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
+# select = ["AIR", "ARG", "B", "D", "E", "F", "I", "ICN", "N", "PD", "PT", "PTH", "RET", "TD", "TID", "W"]
+# select = ["A", "B", "C", "D", "E", "F", "G", "I", "N", "Q", "S", "T", "W", "ANN", "ARG", "BLE", "COM", "DJ", "EM", "ERA", "EXE", "ICN", "INP", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PTH", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "UP", "YTT"]
+select = ["ALL"]
+ignore = [
+  "ANN", # Type hints related, let mypy/pyright handle these.
+  "ARG001", # Unused function argument - OK for Celery tasks with bind=True
+  "B008", # Function call in argument defaults - OK for FastAPI Depends()
+  "BLE001", # Blind exception catching - OK for health checks and error handlers
+  "C901", # Function is too complex - OK for data preparation functions
+  "COM812", # "Trailing comma missing". If black is happy, I'm happy.
+  "D104", # "Missing docstring in public package"
+  "D107", # "Missing docstring in __init__"
+  "D212", # "Multi-line docstring summary should start at the first line"
+  "D203", # "1 blank line required before class docstring"
+  "D401", # Imperative mood for docstrings - OK as is
+  "DTZ001", # "The use of datetime.datetime() without tzinfo argument is not allowed". It's OK for Airflow DAG start_date
+  "DTZ003", # datetime.utcnow() - We use it for naive UTC timestamps
+  "E501", # "Line too long". If black is happy, I'm happy.
+  "EM101", # "Exception must not use a string literal, assign to variable first". It's OK
+  "EM102", # "Exception must not use an f-string literal, assign to variable first". It's OK
+  "ERA001", # Commented-out code - Keep for S3 future implementation
+  "FAST001", # FastAPI response_model - Can be explicit for clarity
+  "FAST002", # FastAPI Annotated - Not required for Depends
+  "FBT003", # "Boolean positional value in function call". I need to defind Spark StructField not NULL columns
+  "FIX002", # "Line contains TODO, consider resolving the issue". It's OK
+  "G004", # "Logging statement uses f-string". Will try to logger.info("Hello, %s!", name)
+  "INP001", # "File {filename} is part of an implicit namespace package. Add an __init__.py". dags folder doesn't need __init__.py
+  "PLC0415", # Import not at top-level - OK for conditional imports in functions
+  "PLR0913", # "Too many arguments to function call ({c_args} > {max_args})". It's OK for some functions
+  "PLR2004", # Magic values in comparisons - OK for simple constants
+  "PLW2901", # Loop variable overwritten - OK for error handling in loops
+  "RET504", # "Unnecessary variable assignment before return statement". It's OK to make result clearer
+  "S307", # eval() usage - OK for parsing Redis string data
+  "SIM102", # Use single if - Nested if for clarity is OK
+  "TRY301", # Abstract raise to inner function - Unnecessary for simple cases
+  "TRY401", # Redundant exception in logging.exception - Explicit is clearer
+  "TRY004", # Prefer TypeError exception for invalid type - Will improve later
+  "TRY003", # Avoid specifying long messages outside the exception class - Will improve later
+  "TC003", # Move standard library import `collections.abc.Sequence` into a type-checking block
+  "TC002", # Move third-party import `langchain_core.messages.AnyMessage` into a type-checking block
+]
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+# fixable = ["A", "B", "C", "D", "E", "F", "G", "I", "N", "Q", "S", "T", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "EM", "ERA", "EXE", "FBT", "ICN", "INP", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PTH", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "TRY", "UP", "YTT"]
+fixable = ["ALL"]
+unfixable = []
+# Exclude a variety of commonly ignored directories.
+exclude = [
+  ".bzr",
+  ".direnv",
+  ".eggs",
+  ".git",
+  ".git-rewrite",
+  ".hg",
+  ".mypy_cache",
+  ".nox",
+  ".pants.d",
+  ".pytype",
+  ".ruff_cache",
+  ".svn",
+  ".tox",
+  ".venv",
+  "__pypackages__",
+  "_build",
+  "buck-out",
+  "build",
+  "dist",
+  "node_modules",
+  "notebooks",
+  "venv"
+]
+
+[tool.ruff.lint.mccabe]
+# Unlike Flake8, default to a complexity level of 10.
+max-complexity = 10
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+"llm/notebook/*" = ["D100"]
+
+[tool.sqlfluff]
+
+[tool.sqlfluff.core]
+max_line_length = 120
+templater = "jinja"
+sql_file_exts = ".sql,.sql.j2,.dml,.ddl"
+exclude_rules = "RF02"
+
+[tool.sqlfluff.indentation]
+indented_joins = false
+indented_using_on = true
+template_blocks_indent = false
+
+[tool.sqlfluff.rules.capitalisation.keywords]
+capitalisation_policy = "lower"
+extended_capitalisation_policy = "lower"
+
+[tool.sqlfluff.templater]
+unwrap_wrapped_queries = true
+
+[tool.sqlfluff.templater.jinja]
+apply_dbt_builtins = true
+
+[tool.sqlfmt]
+line_length = 120
+exclude = ["target/**/*", "dbt_packages/**/*", "notebooks/**/*", "macros/**/*"]
