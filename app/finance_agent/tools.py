@@ -10,9 +10,9 @@ consider implementing more robust and specialized tools tailored to your needs.
 from collections.abc import Callable
 from typing import Annotated, Any, cast
 
-from langchain_community.tools.tavily_search import TavilySearchResults
 from langchain_core.runnables import RunnableConfig
 from langchain_core.tools import InjectedToolArg
+from langchain_tavily import TavilySearch
 
 from app.finance_agent.configuration import Configuration
 
@@ -28,8 +28,8 @@ async def search(
     for answering questions about current events.
     """
     configuration = Configuration.from_runnable_config(config)
-    wrapped = TavilySearchResults(max_results=configuration.max_search_results)
-    result = await wrapped.ainvoke({"query": query})
+    tool = TavilySearch(max_results=configuration.max_search_results)
+    result = await tool.ainvoke({"query": query})
     return cast("list[dict[str, Any]]", result)
 
 
