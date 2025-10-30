@@ -33,13 +33,13 @@ services:
 
   api:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
     ports:
       - "${LANGGRAPH_LOCAL_PORT}:8000"
       - "8003:8003"
     volumes:
-      - .:/deps/ai_finance
+      - ./backend:/deps/ai_finance
     depends_on:
       redis:
         condition: service_healthy
@@ -55,3 +55,19 @@ services:
       interval: 60s
       start_interval: 1s
       start_period: 10s
+
+  ui:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_LANGGRAPH_API_URL: http://127.0.0.1:${LANGGRAPH_LOCAL_PORT}
+        NEXT_PUBLIC_ENVIRONMENT: local
+    ports:
+      - "${NEXT_LOCAL_PORT}:3000"
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - api
+    env_file: ./frontend/.env
+    command: pnpm dev
