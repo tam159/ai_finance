@@ -48,6 +48,7 @@ services:
     environment:
       REDIS_URI: redis://redis:6379
       POSTGRES_URI: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      LANGSMITH_LANGGRAPH_DESKTOP: "true"
     env_file: .env
     healthcheck:
       test: ["CMD", "python", "/api/healthcheck.py"]
