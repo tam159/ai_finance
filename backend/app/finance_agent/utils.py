@@ -37,6 +37,9 @@ def load_chat_model(fully_specified_name: str) -> BaseChatModel:
         model_parameters["temperature"] = 1
         model_parameters["disable_streaming"] = True
 
+    if "gpt-5" in model:
+        model_parameters["reasoning_effort"] = "minimal"
+
     return init_chat_model(
         model=model,
         model_provider=provider,

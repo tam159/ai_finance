@@ -30,6 +30,11 @@ class Configuration:
         },
     )
 
+    role: str = field(
+        default="accounting_manager",
+        metadata={"description": "User role."},
+    )
+
     max_search_results: int = field(
         default=10,
         metadata={
