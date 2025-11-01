@@ -15,3 +15,13 @@
   docker compose down
   ```
 - Open `https://smith.langchain.com/studio/?baseUrl=http://127.0.0.1:{LANGGRAPH_LOCAL_PORT}` in your browser, e.g. https://smith.langchain.com/studio/?baseUrl=http://127.0.0.1:8129
+
+Here is a simple flow chart:
+
+```mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```
