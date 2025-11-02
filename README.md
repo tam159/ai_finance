@@ -1,5 +1,9 @@
 # Ask Finance - AI Finance Assistant Architecture
 
+
+https://github.com/user-attachments/assets/d470fdce-99fc-42e6-9b47-f367bff0a7dd
+
+
 ## Executive Summary
 
 Ask Finance is an enterprise-grade AI-powered financial assistant designed to serve as a virtual financial business partner for organizations with multiple business units and regions. The system enables natural language queries about financial data, provides role-based access control, and generates insights in multiple formats (text, Excel, PowerPoint).
