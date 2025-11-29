@@ -7,12 +7,12 @@ These tools are intended as free examples to get started. For production use,
 consider implementing more robust and specialized tools tailored to your needs.
 """
 
-from collections.abc import Callable
 from enum import StrEnum
 from typing import Annotated, Any, cast
 
 from langchain_core.runnables import RunnableConfig
 from langchain_core.tools import InjectedToolArg, tool
+from langchain_core.tools.base import BaseTool
 from langchain_tavily import TavilySearch
 
 from app.data_ingestion.csv_analyzer import summarize_csv
@@ -94,4 +94,4 @@ def summarize_financial_data(  # noqa: D417
     return "You are not authorized to access this data. Contact IT team for support."
 
 
-TOOLS: list[Callable[..., Any]] = [retrieve_financial_data, summarize_financial_data]
+TOOLS: list[BaseTool] = [retrieve_financial_data, summarize_financial_data]
