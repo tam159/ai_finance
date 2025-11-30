@@ -1,4 +1,4 @@
-FROM langchain/langgraph-api:3.13-92975bb
+FROM langchain/langgraph-api:3.13
 
 RUN apt update && apt upgrade -y
 RUN apt install -y build-essential wget curl vim lsb-release gnupg2
