@@ -267,3 +267,6 @@ fabric.properties
 
 # Working directories
 local_experiments/
+
+# Certificates
+netskope.pem
