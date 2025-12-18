@@ -40,8 +40,9 @@ def load_chat_model(fully_specified_name: str) -> BaseChatModel:
     if "gpt-5" in model:
         model_parameters["reasoning_effort"] = "minimal"
 
-    if "gpt-5.1" in model:
+    if "gpt-5.1" in model or "gpt-5.2" in model:
         model_parameters["reasoning_effort"] = "none"
+        model_parameters["verbosity"] = "low"
 
     return init_chat_model(
         model=model,
